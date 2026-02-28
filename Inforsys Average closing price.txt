@@ -1,0 +1,27 @@
+import yfinance as yf
+
+ticker = "INFY.NS"
+start_date = "2021-04-01"
+end_date = "2023-03-31"
+
+data = yf.download(
+    ticker,
+    start=start_date,
+    end=end_date,
+    progress=False,
+    auto_adjust=False
+)
+
+# Confirm data downloaded
+print("Rows downloaded:", len(data))
+
+# Flatten multi-index columns
+data.columns = data.columns.get_level_values(0)
+
+closing_prices = data["Close"]
+
+num_days = closing_prices.count()
+average_price = closing_prices.sum() / num_days
+
+print("Total number of trading days:", num_days)
+print("Average closing price:", round(average_price, 2))
